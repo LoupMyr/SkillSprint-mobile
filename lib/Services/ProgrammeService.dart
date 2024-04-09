@@ -12,7 +12,6 @@ class ProgrammeService implements ProgrammeServiceInterface {
   @override
   Future<List<Programme>> getAllProgrammes() async {
     List<Programme> programmes = [];
-    List<String> list = [];
     await db.collection("programmes").get().then((collection) => {
           for (var doc in collection.docs)
             {programmes.add(Programme.fromDocument(doc))}
@@ -28,16 +27,18 @@ class ProgrammeService implements ProgrammeServiceInterface {
       "rep": 1815
     };
 
-    this
-        .db
-        .collection("programmes")
-        .add(progr)
-        .then((value) => print("Add successfull"));
+    db.collection("programmes").add(progr).then((value) => print("Add successfull"));
   }
 
   @override
-  Future<List<Programme>> getProgrammesPublic() {
-    // TODO: implement getProgrammesPublic
-    throw UnimplementedError();
+  Future<List<Programme>> getProgrammesPublic() async {
+    List<Programme> programmes = await getAllProgrammes();
+    List<Programme> result = [];
+    for (Programme p in programmes) {
+      if (p.estPublic) {
+        result.add(p);
+      }
+    }
+    return result;
   }
 }

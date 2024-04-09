@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,17 +13,16 @@ class Programme {
   Programme(this._uid, this._nom, this._estPublic, this._idExercices,
       this._id_utilisateur);
 
-  static Programme fromDocument(QueryDocumentSnapshot doc) {
-    List<String> ids = [];
-    for(String exo in doc.get("exercices")){
-      ids.add(exo.toString());
-    }
-    return Programme(doc.id, doc.get("nom"),doc.get("estPublic"), ids, doc.get("id_utilisateur"));
-  }
+  Programme.fromDocument(QueryDocumentSnapshot doc)
+      : _uid = doc.id,
+        _nom = doc.get("nom"),
+        _estPublic = doc.get("estPublic"),
+        _idExercices = List.from(doc.get("exercices")),
+        _id_utilisateur = doc.get("id_utilisateur");
+
 
   Map<String, dynamic> serialize() {
     return {
-      "uid": _uid,
       "nom": _nom,
       "exercice": _idExercices,
       "estPublic": _estPublic,

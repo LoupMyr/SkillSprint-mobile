@@ -8,6 +8,7 @@ import 'package:skillsprint/Services/ProgrammeService.dart';
 
 class Accueil extends StatefulWidget {
   const Accueil({super.key, required this.authService});
+
   final AuthServiceInterface authService;
 
   @override
@@ -19,7 +20,7 @@ class ListeProgramme extends State<Accueil> {
   List<Programme> lesProgrammes = [];
 
   Future<String> getAllProgrammes() async {
-    lesProgrammes = await programmeService.getAllProgrammes();
+    lesProgrammes = await programmeService.getProgrammesPublic();
     return '';
   }
 
@@ -30,18 +31,28 @@ class ListeProgramme extends State<Accueil> {
       result.add(
         InkWell(
           child: Container(
-            padding: const EdgeInsets.all(20),
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.height * 0.5,
             decoration: CustomStyle.boxDecorationGradient,
-            child: Text(
-              p.nom.isEmpty ? "Sans titre" : p.nom,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            child: Center(
+              child: Text(
+                p.nom.isEmpty ? "Sans nom" : p.nom,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsProgramme(title: p.nom, authService: widget.authService, programme: p),)),
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsProgramme(
+                    title: p.nom,
+                    authService: widget.authService,
+                    programme: p),
+              )),
         ),
       );
     }
