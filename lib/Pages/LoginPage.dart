@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  AuthServiceInterface? _authService;
+  late AuthServiceInterface _authService;
   final _formLogin = GlobalKey<FormState>();
   String _email = "";
   String _mdp = "";
@@ -27,14 +27,15 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscureMdp = true;
 
   Future<void> login() async {
-    UserCredential? user = await _authService!.login(_email, _mdp);
+    UserCredential? user = await _authService.login(_email, _mdp);
     if (user != null) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
             title: "Accueil",
-            authService: _authService!,
+            authService: _authService,
+            user: user
           ),
         ),
       );
@@ -83,7 +84,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<String> createAuth() async {
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseApp app =
-        await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.android,
+    );
     FirebaseAuth auth = FirebaseAuth.instanceFor(app: app);
     _authService = AuthService(auth);
     return '';
@@ -218,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
         return Scaffold(
           appBar: AppBarLayout(
               title: "Connexion",
-              authService: _authService!,
+              authService: _authService,
               isConnected: false),
           body: Center(
             child: Column(

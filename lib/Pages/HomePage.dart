@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:skillsprint/Domain/Services/AuthServiceInterface.dart';
 import 'package:skillsprint/Layouts/Accueil.dart';
@@ -6,18 +7,16 @@ import 'package:skillsprint/Layouts/CreateProgrammes.dart';
 import 'package:skillsprint/Layouts/Profil.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title, required this.authService});
+  const HomePage({super.key, required this.title, required this.authService, required this.user});
   final AuthServiceInterface authService;
   final String title;
-
+  final UserCredential user;
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   final List<Widget> _widgetOptions = <Widget>[
     Accueil(),
     CreateProgrammes(),
