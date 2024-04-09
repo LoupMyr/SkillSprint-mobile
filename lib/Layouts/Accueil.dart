@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:skillsprint/Domain/Services/AuthServiceInterface.dart';
 import 'package:skillsprint/Domain/Services/ProgrammeServiceInterface.dart';
 import 'package:skillsprint/Layouts/CustomStyle.dart';
 import 'package:skillsprint/Models/Programme.dart';
+import 'package:skillsprint/Pages/DetailsProgramme.dart';
 import 'package:skillsprint/Services/ProgrammeService.dart';
 
-class Accueil extends StatelessWidget {
+class Accueil extends StatefulWidget {
+  const Accueil({super.key, required this.authService});
+  final AuthServiceInterface authService;
+
+  @override
+  State<Accueil> createState() => ListeProgramme();
+}
+
+class ListeProgramme extends State<Accueil> {
   final ProgrammeServiceInterface programmeService = ProgrammeService();
   List<Programme> lesProgrammes = [];
 
@@ -31,7 +41,7 @@ class Accueil extends StatelessWidget {
               ),
             ),
           ),
-          onTap: () => null,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsProgramme(title: p.nom, authService: widget.authService, programme: p),)),
         ),
       );
     }

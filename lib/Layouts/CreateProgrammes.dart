@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Programme extends StatefulWidget {
-  const Programme({super.key});
+class ProgrammeForm extends StatefulWidget {
+  const ProgrammeForm({super.key});
 
   @override
-  State<Programme> createState() => CreateProgrammes();
+  State<ProgrammeForm> createState() => CreateProgrammes();
 }
 
-class CreateProgrammes extends State<Programme> {
+class CreateProgrammes extends State<ProgrammeForm> {
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
