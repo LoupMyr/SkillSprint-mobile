@@ -22,24 +22,23 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscureMdp = true;
 
   Future<void> register() async {
-    String response = await widget.authService.register(this._email, this._mdp, this._pseudo);
+    String response = await widget.authService.register(_email, _mdp, _pseudo);
     if (response == '') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginPage(title: "Connectez-vous"),
+          builder: (context) => const LoginPage(title: "Connectez-vous"),
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Votre compte a été créé."),
       ));
-    }
-    else {
+    } else {
       String str = "Une erreur est survenue";
-      if(response == "weak-password"){
-        str = str + ": mot de passe trop faible.";
-      }else if(response == "email-already-in-use"){
-        str = str + ": email déjà utilisé.";
+      if (response == "weak-password") {
+        str = "$str: mot de passe trop faible.";
+      } else if (response == "email-already-in-use") {
+        str = "$str: email déjà utilisé.";
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(str),
@@ -58,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           children: [
             Form(
-              key: this._formRegister,
+              key: _formRegister,
               child: Column(
                 children: [
                   SizedBox(
@@ -67,12 +66,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: const InputDecoration(
                         label: Text('Pseudo:'),
                       ),
-                      validator: (valeur) {
-                        if (valeur == null || valeur.isEmpty) {
-                          this._pseudo = "";
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          _pseudo = "";
                         } else {
-                          this._pseudo = valeur;
+                          _pseudo = value;
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -82,12 +82,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: const InputDecoration(
                         label: Text('Email:'),
                       ),
-                      validator: (valeur) {
-                        if (valeur == null || valeur.isEmpty) {
-                          this._email = "";
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          _email = "";
                         } else {
-                          this._email = valeur;
+                          _email = value;
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -98,25 +99,28 @@ class _RegisterPageState extends State<RegisterPage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.7,
                         child: TextFormField(
-                          obscureText: this._obscureMdp,
+                          obscureText: _obscureMdp,
                           decoration: const InputDecoration(
                             label: Text('Mot de passe:'),
                           ),
-                          validator: (valeur) {
-                            if (valeur == null || valeur.isEmpty) {
-                              this._mdp = "";
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              _mdp = "";
                             } else {
-                              this._mdp = valeur;
+                              _mdp = value;
                             }
+                            return null;
                           },
                         ),
                       ),
                       SizedBox(
-                        child: IconButton(onPressed: (){
-                          setState(() {
-                            this._obscureMdp = !this._obscureMdp;
-                          });
-                        }, icon: Icon(Icons.remove_red_eye_rounded)),
+                        child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _obscureMdp = !_obscureMdp;
+                              });
+                            },
+                            icon: const Icon(Icons.remove_red_eye_rounded)),
                       ),
                     ],
                   ),
@@ -125,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepOrange),
                     onPressed: () {
-                      if (this._formRegister.currentState!.validate()) {
+                      if (_formRegister.currentState!.validate()) {
                         register();
                       }
                     },

@@ -10,7 +10,6 @@ import 'package:skillsprint/firebase_options.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -18,7 +17,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late AuthServiceInterface _authService;
+  AuthServiceInterface? _authService;
   final _formLogin = GlobalKey<FormState>();
   String _email = "";
   String _mdp = "";
@@ -28,14 +27,14 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscureMdp = true;
 
   Future<void> login() async {
-    UserCredential? user = await _authService.login(this._email, this._mdp);
+    UserCredential? user = await _authService!.login(_email, _mdp);
     if (user != null) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
             title: "Accueil",
-            authService: this._authService,
+            authService: _authService!,
           ),
         ),
       );
@@ -54,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var email = prefs.getString("email") ?? "";
       var password = prefs.getString("password") ?? "";
-      var remeberMe = prefs.getBool("remember_me") ?? false;
-      if (remeberMe) {
+      var rememberMe = prefs.getBool("remember_me") ?? false;
+      if (rememberMe) {
         setState(() {
           _rememberMe = true;
         });
@@ -67,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _handleRemeberme(bool value) {
+  void _handleRememberMe(bool value) {
     _rememberMe = value;
     SharedPreferences.getInstance().then(
       (prefs) {
@@ -86,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
     FirebaseApp app =
         await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
     FirebaseAuth auth = FirebaseAuth.instanceFor(app: app);
-    this._authService = AuthService(auth);
+    _authService = AuthService(auth);
     return '';
   }
 
@@ -101,11 +100,11 @@ class _LoginPageState extends State<LoginPage> {
     return FutureBuilder(
       future: createAuth(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        Container container = Container();
+        Widget widget = const SizedBox();
         if (snapshot.hasData) {
-          container = Container(
+          widget = SizedBox(
             child: Form(
-              key: this._formLogin,
+              key: _formLogin,
               child: Column(
                 children: [
                   SizedBox(
@@ -115,12 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: const InputDecoration(
                         label: Text('Email:'),
                       ),
-                      validator: (valeur) {
-                        if (valeur == null || valeur.isEmpty) {
-                          this._email = "";
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          _email = "";
                         } else {
-                          this._email = valeur;
+                          _email = value;
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -132,16 +132,17 @@ class _LoginPageState extends State<LoginPage> {
                         width: MediaQuery.of(context).size.width * 0.7,
                         child: TextFormField(
                           controller: _passwordController,
-                          obscureText: this._obscureMdp,
+                          obscureText: _obscureMdp,
                           decoration: const InputDecoration(
                             label: Text('Mot de passe:'),
                           ),
-                          validator: (valeur) {
-                            if (valeur == null || valeur.isEmpty) {
-                              this._mdp = "";
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              _mdp = "";
                             } else {
-                              this._mdp = valeur;
+                              _mdp = value;
                             }
+                            return null;
                           },
                         ),
                       ),
@@ -149,14 +150,14 @@ class _LoginPageState extends State<LoginPage> {
                         child: IconButton(
                             onPressed: () {
                               setState(() {
-                                this._obscureMdp = !this._obscureMdp;
+                                _obscureMdp = !_obscureMdp;
                               });
                             },
-                            icon: Icon(Icons.remove_red_eye_rounded)),
+                            icon: const Icon(Icons.remove_red_eye_rounded)),
                       ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -169,9 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: Checkbox(
                             activeColor: Colors.deepOrange,
-                            value: this._rememberMe,
+                            value: _rememberMe,
                             onChanged: (bool? value) {
-                              _handleRemeberme(value!);
+                              _handleRememberMe(value!);
                             },
                           ),
                         ),
@@ -191,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepOrange),
                     onPressed: () async {
-                      if (this._formLogin.currentState!.validate()) {
+                      if (_formLogin.currentState!.validate()) {
                         await login();
                       }
                     },
@@ -204,22 +205,24 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           );
-        } else if (snapshot.hasError) {
-          container = Container(
-            child: const Icon(Icons.error_outline,
+        }
+        else if (snapshot.hasError) {
+          widget = const SizedBox(
+            child: Icon(Icons.error_outline,
                 color: Color.fromARGB(255, 255, 17, 0)),
           );
-        } else {
-          container = Container(child: const Text("Loading"));
+        }
+        else {
+          widget = const SizedBox(child: Text("Loading"));
         }
         return Scaffold(
           appBar: AppBarLayout(
-              title: widget.title,
-              authService: this._authService,
+              title: "Connexion",
+              authService: _authService!,
               isConnected: false),
           body: Center(
             child: Column(
-              children: <Widget>[container],
+              children: <Widget>[widget],
             ),
           ),
         );
