@@ -18,20 +18,20 @@ class Accueil extends StatelessWidget {
     for (Programme p in lesProgrammes) {
       result.add(const Padding(padding: EdgeInsets.symmetric(vertical: 10)));
       result.add(
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: CustomStyle.boxDecorationGradient,
-          child: InkWell(
+        InkWell(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: CustomStyle.boxDecorationGradient,
             child: Text(
-              p.nom,
+              p.nom.isEmpty ? "Sans titre" : p.nom,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () => null,
           ),
+          onTap: () => null,
         ),
       );
     }

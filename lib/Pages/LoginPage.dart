@@ -29,18 +29,19 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> login() async {
     UserCredential? user = await _authService.login(_email, _mdp);
     if (user != null) {
+      User currentUser = FirebaseAuth.instance.currentUser!;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
             title: "Accueil",
             authService: _authService,
-            user: user
+            user: currentUser
           ),
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Bienvenue ${user.user!.displayName} !"),
+        content: Text("Bienvenue ${currentUser.displayName} !"),
       ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

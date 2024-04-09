@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title, required this.authService, required this.user});
   final AuthServiceInterface authService;
   final String title;
-  final UserCredential user;
+  final User user;
   @override
   State<HomePage> createState() => _HomePageState();
 }
