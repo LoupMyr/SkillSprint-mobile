@@ -14,11 +14,25 @@ class ProgrammeService implements ProgrammeServiceInterface {
     List<Programme> programmes = [];
     List<String> list = [];
     await db.collection("programmes").get().then((collection) => {
-      for(var doc in collection.docs){
-        programmes.add(Programme.fromDocument(doc))
-      }
-    });
+          for (var doc in collection.docs)
+            {programmes.add(Programme.fromDocument(doc))}
+        });
     return programmes;
+  }
+
+  Future<void> PostProgrammes(Programme programme) async {
+    final progr = <String, dynamic>{
+      "estPublic": "Ada",
+      "id_utilisateur": "Lovelace",
+      "nom": 1815,
+      "rep": 1815
+    };
+
+    this
+        .db
+        .collection("programmes")
+        .add(progr)
+        .then((value) => print("Add successfull"));
   }
 
   @override
