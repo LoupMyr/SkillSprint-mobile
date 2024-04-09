@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   final List<Widget> _widgetOptions = <Widget>[
-    CreateProgrammes(),
+    Programme(),
     Accueil(),
     Profil()
   ];
@@ -32,7 +32,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarLayout(title: "Accueil", authService: widget.authService),
+      appBar:
+          AppBarLayout(title: "SkillSprint", authService: widget.authService),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
