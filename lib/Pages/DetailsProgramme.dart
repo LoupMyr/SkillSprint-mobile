@@ -27,24 +27,33 @@ class _DetailsProgrammeState extends State<DetailsProgramme> {
   List<Exercice> lesExercices = [];
 
   Future<String> getAllExercices() async {
-    lesExercices = await exerciceService.getExercicesInProgramme(widget.programme);
+    lesExercices =
+        await exerciceService.getExercicesInProgramme(widget.programme);
     return '';
   }
 
-  List<Widget> createCards(){
+  List<Widget> createCards() {
     List<Widget> result = [];
-    for(Exercice exo in lesExercices){
+    for (Exercice exo in lesExercices) {
       result.add(const Padding(padding: EdgeInsets.symmetric(vertical: 10)));
       result.add(
         Container(
-          padding: const EdgeInsets.all(20),
+          height: MediaQuery.of(context).size.height * 0.2,
+          width: MediaQuery.of(context).size.height * 0.5,
           decoration: CustomStyle.boxDecorationGradient,
-          child: Text(
-            exo.nom.isEmpty ? "Sans nom" : exo.nom,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  exo.nom.isEmpty ? "Sans nom" : exo.nom,
+                  style: CustomStyle.textStyleCardTitle,
+                ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                Text("${exo.nbSerie} série", style: CustomStyle.textStyleCardSubTitle),
+                const Text("-", style: CustomStyle.textStyleCardSubTitle),
+                Text("${exo.nbRep} répétions", style: CustomStyle.textStyleCardSubTitle),
+
+              ],
             ),
           ),
         ),
@@ -70,9 +79,7 @@ class _DetailsProgrammeState extends State<DetailsProgramme> {
             appBar: AppBarLayout(
                 title: widget.title, authService: widget.authService),
             body: SingleChildScrollView(
-              child: Center(
-                  child: item
-              ),
+              child: Center(child: item),
             ),
           );
         });

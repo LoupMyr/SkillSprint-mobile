@@ -37,11 +37,7 @@ class ListeProgramme extends State<Accueil> {
             child: Center(
               child: Text(
                 p.nom.isEmpty ? "Sans nom" : p.nom,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: CustomStyle.textStyleCardTitle,
               ),
             ),
           ),

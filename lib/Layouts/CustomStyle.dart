@@ -7,4 +7,16 @@ class CustomStyle {
     borderRadius: const BorderRadius.all(Radius.circular(8)),
     gradient: const LinearGradient(colors: [Colors.deepOrange, Colors.orange]),
   );
+
+  static const TextStyle textStyleCardTitle = TextStyle(
+    color: Colors.black,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const TextStyle textStyleCardSubTitle = TextStyle(
+    color: Colors.black,
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+  );
 }
