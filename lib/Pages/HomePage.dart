@@ -17,10 +17,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
+  late final User user;
   final List<Widget> _widgetOptions = <Widget>[
     Programme(),
     Accueil(),
-    Profil()
+    Profil(),
   ];
 
   void _onItemTapped(int index) {
@@ -62,3 +63,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+
