@@ -27,7 +27,7 @@ class AppBarLayout extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: () async {
                   int response = await authService.logout();
                   if(response == 0){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (contect) => LoginPage(title: "Connectez-vous")));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (contect) => LoginPage(title: "Connectez-vous", authService: authService,)));
                   }
                 },
                 icon: const Icon(Icons.logout_rounded))

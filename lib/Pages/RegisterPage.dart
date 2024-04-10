@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const LoginPage(title: "Connectez-vous"),
+          builder: (context) => LoginPage(title: "Connectez-vous", authService: widget.authService,),
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

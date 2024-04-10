@@ -5,11 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skillsprint/Domain/Services/AuthServiceInterface.dart';
 import 'package:skillsprint/Layouts/AppBarLayout.dart';
 import 'package:skillsprint/Pages/HomePage.dart';
-import 'package:skillsprint/Services/AuthService.dart';
 import 'package:skillsprint/firebase_options.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required this.title});
+  const LoginPage({super.key, required this.title, required this.authService});
+  final AuthServiceInterface authService;
   final String title;
 
   @override
@@ -17,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late AuthServiceInterface _authService;
   final _formLogin = GlobalKey<FormState>();
   String _email = "";
   String _mdp = "";
@@ -27,17 +26,14 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscureMdp = true;
 
   Future<void> login() async {
-    UserCredential? user = await _authService.login(_email, _mdp);
+    UserCredential? user = await widget.authService.login(_email, _mdp);
     if (user != null) {
       User currentUser = FirebaseAuth.instance.currentUser!;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
-            title: "Accueil",
-            authService: _authService,
-            user: currentUser
-          ),
+              title: "Accueil", authService: widget.authService, user: currentUser),
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -84,12 +80,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<String> createAuth() async {
     WidgetsFlutterBinding.ensureInitialized();
-    FirebaseApp app =
-    await Firebase.initializeApp(
+    FirebaseApp app = await Firebase.initializeApp(
       options: DefaultFirebaseOptions.android,
     );
     FirebaseAuth auth = FirebaseAuth.instanceFor(app: app);
-    _authService = AuthService(auth);
+    //_authService = AuthService(auth);
     return '';
   }
 
@@ -101,12 +96,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    /*return FutureBuilder(
       future: createAuth(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         Widget widget = const SizedBox();
-        if (snapshot.hasData) {
-          widget = SizedBox(
+        if (snapshot.hasData) {*/
+          Widget item = SizedBox(
             child: Form(
               key: _formLogin,
               child: Column(
@@ -209,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           );
-        }
+        /*}
         else if (snapshot.hasError) {
           widget = const SizedBox(
             child: Icon(Icons.error_outline,
@@ -219,18 +214,19 @@ class _LoginPageState extends State<LoginPage> {
         else {
           widget = const SizedBox(child: Text("Loading"));
         }
+         */
         return Scaffold(
           appBar: AppBarLayout(
               title: "Connexion",
-              authService: _authService,
+              authService: widget.authService,
               isConnected: false),
           body: Center(
             child: Column(
-              children: <Widget>[widget],
+              children: <Widget>[item],
             ),
           ),
         );
-      },
-    );
+      //},
+    //);
   }
 }

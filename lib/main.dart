@@ -1,18 +1,20 @@
 
 import 'package:flutter/material.dart';
+import 'package:skillsprint/Domain/Services/AuthServiceInterface.dart';
 import 'package:skillsprint/Pages/LoginPage.dart';
+import 'package:skillsprint/Services/AuthService.dart';
 
 
 Future<void> main() async {
-  runApp(const MyApp());
+  runApp(MyApp(authService: await AuthService.create()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.authService});
+  final AuthServiceInterface authService;
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Accueil',
       debugShowCheckedModeBanner: false,
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
-      home: const LoginPage(title: "Connexion"),
+      home: LoginPage(title: "Connexion", authService: authService,),
     );
   }
 }
