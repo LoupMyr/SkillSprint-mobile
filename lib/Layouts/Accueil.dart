@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:skillsprint/Domain/Services/AuthServiceInterface.dart';
 import 'package:skillsprint/Domain/Services/ProgrammeServiceInterface.dart';
 import 'package:skillsprint/Layouts/CustomStyle.dart';
 import 'package:skillsprint/Models/Programme.dart';
+import 'package:skillsprint/Pages/DetailsProgramme.dart';
 import 'package:skillsprint/Services/ProgrammeService.dart';
 
-class Accueil extends StatelessWidget {
+class Accueil extends StatefulWidget {
+  const Accueil({super.key, required this.authService});
+
+  final AuthServiceInterface authService;
+
+  @override
+  State<Accueil> createState() => ListeProgramme();
+}
+
+class ListeProgramme extends State<Accueil> {
   final ProgrammeServiceInterface programmeService = ProgrammeService();
   List<Programme> lesProgrammes = [];
 
   Future<String> getAllProgrammes() async {
-    lesProgrammes = await programmeService.getAllProgrammes();
+    lesProgrammes = await programmeService.getProgrammesPublic();
     return '';
   }
 
@@ -20,18 +31,24 @@ class Accueil extends StatelessWidget {
       result.add(
         InkWell(
           child: Container(
-            padding: const EdgeInsets.all(20),
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.height * 0.5,
             decoration: CustomStyle.boxDecorationGradient,
-            child: Text(
-              p.nom.isEmpty ? "Sans titre" : p.nom,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            child: Center(
+              child: Text(
+                p.nom.isEmpty ? "Sans nom" : p.nom,
+                style: CustomStyle.textStyleCardTitle,
               ),
             ),
           ),
-          onTap: () => null,
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsProgramme(
+                    title: p.nom,
+                    authService: widget.authService,
+                    programme: p),
+              )),
         ),
       );
     }

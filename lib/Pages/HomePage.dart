@@ -17,12 +17,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
-  late final User user;
-  final List<Widget> _widgetOptions = <Widget>[
-    Programme(),
-    Accueil(),
-    Profil(),
-  ];
+  List<Widget> _widgetOptions = [];
+
+  @override
+  void initState() {
+    _widgetOptions = <Widget>[
+      const ProgrammeForm(),
+      Accueil(authService: widget.authService),
+      Profil()
+    ];
+    super.initState();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
