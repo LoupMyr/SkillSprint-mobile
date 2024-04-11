@@ -38,28 +38,33 @@ class _DetailsProgrammeState extends State<DetailsProgramme> {
       result.add(const Padding(padding: EdgeInsets.symmetric(vertical: 10)));
       result.add(
         Container(
-          height: MediaQuery.of(context).size.height * 0.2,
           width: MediaQuery.of(context).size.height * 0.5,
           decoration: CustomStyle.boxDecorationGradient,
+          padding: EdgeInsets.symmetric(horizontal: 5),
           child: Center(
-            child: Column(
-              children: [
-                Text(
-                  exo.nom.isEmpty ? "Sans nom" : exo.nom,
-                  style: CustomStyle.textStyleCardTitle,
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                Text("${exo.nbSerie} série", style: CustomStyle.textStyleCardSubTitle),
-                const Text("-", style: CustomStyle.textStyleCardSubTitle),
-                Text("${exo.nbRep} répétions", style: CustomStyle.textStyleCardSubTitle),
-
-              ],
-            ),
+            child: Column(children: createExoText(exo)),
           ),
         ),
       );
     }
     return result;
+  }
+
+  List<Widget> createExoText(Exercice exo) {
+    return [
+      Text(
+        exo.nom.isEmpty ? "Sans nom" : exo.nom,
+        style: CustomStyle.textStyleCardTitle,
+      ),
+      Text(
+        exo.desc.isEmpty ? "Sans description" : exo.desc,
+        textAlign: TextAlign.center,
+      ),
+      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+      Text("${exo.nbSerie} série", style: CustomStyle.textStyleCardSubTitle),
+      const Text("-", style: CustomStyle.textStyleCardSubTitle),
+      Text("${exo.nbRep} répétions", style: CustomStyle.textStyleCardSubTitle),
+    ];
   }
 
   @override

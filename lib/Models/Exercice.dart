@@ -3,14 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Exercice {
   String _uid;
   String _nom;
+  String _desc;
   int _nbSerie;
   int _nbRep;
 
-  Exercice(this._uid, this._nom, this._nbSerie, this._nbRep);
+  Exercice(this._uid, this._nom, String this._desc, this._nbSerie, this._nbRep);
 
   Exercice.fromDocument(QueryDocumentSnapshot doc)
       : _uid = doc.id,
         _nom = doc.get("nom"),
+        _desc = doc.get("desc"),
         _nbSerie = doc.get("nbSerie"),
         _nbRep = doc.get("nbRep");
 
@@ -44,5 +46,12 @@ class Exercice {
 
   set nom(String value) {
     _nom = value;
+  }
+
+  String get
+  desc => _desc;
+
+  set desc(String value) {
+    _desc = value;
   }
 }

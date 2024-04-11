@@ -25,6 +25,7 @@ class CreateProgrammes extends State<ProgrammeForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

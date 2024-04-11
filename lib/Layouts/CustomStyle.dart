@@ -19,4 +19,16 @@ class CustomStyle {
     fontSize: 17,
     fontWeight: FontWeight.w600,
   );
+
+  static const TextStyle textStyleTitleProfil = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: Colors.black87,
+      fontFamily: 'Roboto');
+
+  static const TextStyle textStyleTitle = TextStyle(
+    fontSize: 23,
+    fontWeight: FontWeight.bold,
+    decoration: TextDecoration.underline
+  );
 }

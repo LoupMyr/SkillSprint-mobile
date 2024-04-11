@@ -39,4 +39,16 @@ class ProgrammeService implements ProgrammeServiceInterface {
     }
     return result;
   }
+
+  @override
+  Future<List<Programme>> getProgrammesByUidUser(String uidUser) async {
+    List<Programme> programmes = await getAllProgrammes();
+    List<Programme> result = [];
+    for (Programme p in programmes) {
+      if (p.id_utilisateur == uidUser) {
+        result.add(p);
+      }
+    }
+    return result;
+  }
 }

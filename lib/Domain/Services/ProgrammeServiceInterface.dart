@@ -7,6 +7,5 @@ abstract class ProgrammeServiceInterface {
 
   Future<List<Programme>> getProgrammesPublic();
 
-
-
+  Future<List<Programme>> getProgrammesByUidUser(String uidUser);
 }

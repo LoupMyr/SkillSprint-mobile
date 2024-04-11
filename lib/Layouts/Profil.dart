@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:skillsprint/Domain/Services/UserServiceInterface.dart';
+import 'package:skillsprint/Layouts/CustomStyle.dart';
+import 'package:skillsprint/Services/UserService.dart';
 
 class Profil extends StatelessWidget {
   @override
@@ -8,40 +11,33 @@ class Profil extends StatelessWidget {
     User? user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Profil',
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Colors.green[700],
-        elevation: 0, // Supprime l'ombre sous l'app bar
-      ),
-      body: user != null ? ProfilContent(user: user) : Center(child: CircularProgressIndicator()),
+      body: user != null
+          ? ProfilContent(user: user)
+          : const Center(child: CircularProgressIndicator()),
       backgroundColor: Colors.grey[200],
     );
   }
 }
 
 class ProfilContent extends StatefulWidget {
+  const ProfilContent({super.key, required this.user});
+
   final User user;
 
-  const ProfilContent({Key? key, required this.user}) : super(key: key);
-
   @override
-  _ProfilContentState createState() => _ProfilContentState();
+  ProfilContentState createState() => ProfilContentState();
 }
 
-class _ProfilContentState extends State<ProfilContent> {
+class ProfilContentState extends State<ProfilContent> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
+  final UserServiceInterface _userService = UserService();
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.user.displayName ?? "");
+    _nameController =
+        TextEditingController(text: widget.user.displayName ?? "");
     _emailController = TextEditingController(text: widget.user.email ?? "");
   }
 
@@ -52,9 +48,19 @@ class _ProfilContentState extends State<ProfilContent> {
     super.dispose();
   }
 
+  Future<void> _updateProfile(BuildContext context) async {
+    List<String> response =
+        await _userService.updateDisplayName(_nameController.text.trim());
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(response[0]),
+      backgroundColor: response[1] == "success" ? Colors.green : Colors.red,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    String formattedCreationDate = DateFormat.yMMMMd().format(widget.user.metadata.creationTime!);
+    String formattedCreationDate =
+        DateFormat.yMMMMd().format(widget.user.metadata.creationTime!);
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -63,11 +69,12 @@ class _ProfilContentState extends State<ProfilContent> {
           Center(
             child: CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage('https://t4.ftcdn.net/jpg/00/97/00/09/360_F_97000908_wwH2goIihwrMoeV9QF3BW6HtpsVFaNVM.jpg'),
+              backgroundImage: const NetworkImage(
+                  'https://t4.ftcdn.net/jpg/00/97/00/09/360_F_97000908_wwH2goIihwrMoeV9QF3BW6HtpsVFaNVM.jpg'),
               backgroundColor: Colors.grey[400],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Center(
             child: Text(
               'Informations Utilisateur',
@@ -79,57 +86,58 @@ class _ProfilContentState extends State<ProfilContent> {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          UserInfoRow(
-            label: 'Nom:',
-            value: TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                hintText: 'Entrez votre nom',
-                border: InputBorder.none,
+          const SizedBox(height: 20),
+          SizedBox(
+            child: UserInfoRow(
+              label: 'Nom:',
+              value: TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  hintText: 'Entrez votre nom',
+                  border: InputBorder.none,
+                ),
               ),
             ),
           ),
-          UserInfoRow(
-            label: 'Email:',
-            value: TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                hintText: 'Entrez votre email',
-                border: InputBorder.none,
-              ),
+          SizedBox(
+            child: Row(
+              children: [
+                const Text(
+                  'Email:',
+                  style: CustomStyle.textStyleTitleProfil,
+                ),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                Text(_emailController.text,
+                    style: const TextStyle(color: Colors.grey)),
+              ],
             ),
           ),
-          UserInfoRow(
-            label: 'Date de création:',
-            value: Text(formattedCreationDate),
+          const SizedBox(height: 20),
+          SizedBox(
+            child: Row(
+              children: [
+                const Text(
+                  'Date de création:',
+                  style: CustomStyle.textStyleTitleProfil,
+                ),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                Text(formattedCreationDate,
+                    style: const TextStyle(color: Colors.grey)),
+              ],
+            ),
           ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              _updateProfile(context);
-            },
-            child: Text('Enregistrer'),
+          const SizedBox(height: 20),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                _updateProfile(context);
+              },
+              child: const Text('Enregistrer'),
+            ),
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _updateProfile(BuildContext context) async {
-    try {
-      await widget.user.updateDisplayName( _nameController.text.trim());
-      await widget.user.verifyBeforeUpdateEmail(_emailController.text.trim());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Profil mis à jour avec succès'),
-        backgroundColor: Colors.green,
-      ));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Erreur lors de la mise à jour du profil: $e'),
-        backgroundColor: Colors.red,
-      ));
-    }
   }
 }
 
@@ -137,7 +145,8 @@ class UserInfoRow extends StatelessWidget {
   final String label;
   final Widget value;
 
-  const UserInfoRow({Key? key, required this.label, required this.value}) : super(key: key);
+  const UserInfoRow({Key? key, required this.label, required this.value})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +157,7 @@ class UserInfoRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -156,7 +165,7 @@ class UserInfoRow extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 200, // Ajustez la largeur pour mieux s'adapter
+            width: MediaQuery.of(context).size.width * 0.7,
             child: value,
           ),
         ],
@@ -164,5 +173,3 @@ class UserInfoRow extends StatelessWidget {
     );
   }
 }
-
-
