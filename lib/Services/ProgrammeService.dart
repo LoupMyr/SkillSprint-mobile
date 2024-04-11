@@ -17,15 +17,15 @@ class ProgrammeService implements ProgrammeServiceInterface {
     return programmes;
   }
 
-  Future<void> PostProgrammes(Programme programme) async {
-    final progr = <String, dynamic>{
-      "estPublic": "Ada",
-      "id_utilisateur": "Lovelace",
-      "nom": 1815,
-      "rep": 1815
-    };
-
-    db.collection("programmes").add(progr).then((value) => print("Add successfull"));
+  Future<void> postProgrammes(Map<String, dynamic> programme) async {
+    try {
+      // Accéder à la collection "posts"
+      await db.collection("programmes").add(programme);
+      // Ajouter un nouveau document avec les données du post
+      print('Post ajouté avec succès');
+    } catch (e) {
+      print('Erreur lors de l\'ajout du post : $e');
+    }
   }
 
   @override

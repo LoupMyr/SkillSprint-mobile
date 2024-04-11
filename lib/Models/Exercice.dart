@@ -19,6 +19,7 @@ class Exercice {
   Map<String, dynamic> serialize() {
     return {
       "nom": _nom,
+      "desc": _desc,
       "nbSerie": _nbSerie,
       "nbRep": _nbRep,
     };
@@ -48,8 +49,7 @@ class Exercice {
     _nom = value;
   }
 
-  String get
-  desc => _desc;
+  String get desc => _desc;
 
   set desc(String value) {
     _desc = value;

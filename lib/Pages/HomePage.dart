@@ -7,10 +7,15 @@ import 'package:skillsprint/Layouts/CreateProgrammes.dart';
 import 'package:skillsprint/Layouts/Profil.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title, required this.authService, required this.user});
+  const HomePage(
+      {super.key,
+      required this.title,
+      required this.authService,
+      required this.user});
   final AuthServiceInterface authService;
   final String title;
   final User user;
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -19,13 +24,18 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   List<Widget> _widgetOptions = [];
 
+  void setIndex(int index) {
+    _selectedIndex = index;
+  }
+
   @override
   void initState() {
     _widgetOptions = <Widget>[
-      const ProgrammeForm(),
+      ProgrammeForm(authService: widget.authService),
       Accueil(authService: widget.authService),
       Profil()
     ];
+
     super.initState();
   }
 
@@ -68,5 +78,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-

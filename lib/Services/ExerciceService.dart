@@ -21,12 +21,30 @@ class ExerciceService implements ExerciceServiceInterface {
   @override
   Future<List<Exercice>> getExercicesInProgramme(Programme programme) async {
     List<Exercice> result = [];
-    for(String uidExo in programme.idExercices){
+    for (String uidExo in programme.idExercices) {
       Exercice? exo = await getExerciceByUid(uidExo);
-      if(exo != null){
+      if (exo != null) {
         result.add(exo);
       }
     }
     return result;
+  }
+
+  static String generateUID() {
+    return FirebaseFirestore.instance.collection('exercice').doc().id;
+  }
+
+  Future<void> addExercices(Map<String, dynamic> exercice, String id) async {
+    try {
+      // Accéder à la collection "posts"
+
+      await db.collection('exercice').doc(id).set(exercice);
+
+      // Ajouter un nouveau document avec les données du post
+
+      print('Post ajouté avec succès');
+    } catch (e) {
+      print('Erreur lors de l\'ajout du post : $e');
+    }
   }
 }
