@@ -21,7 +21,7 @@ class Programme {
   Map<String, dynamic> serialize() {
     return {
       "nom": _nom,
-      "exercice": _idExercices,
+      "exercices": _idExercices,
       "estPublic": _estPublic,
       "id_utilisateur": _id_utilisateur
     };

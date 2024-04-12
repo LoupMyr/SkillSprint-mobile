@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:skillsprint/Domain/Services/ExerciceServiceInterface.dart';
 import 'package:skillsprint/Models/Exercice.dart';
 import 'package:skillsprint/Models/Programme.dart';
@@ -36,15 +37,9 @@ class ExerciceService implements ExerciceServiceInterface {
 
   Future<void> addExercices(Map<String, dynamic> exercice, String id) async {
     try {
-      // Accéder à la collection "posts"
-
       await db.collection('exercice').doc(id).set(exercice);
-
-      // Ajouter un nouveau document avec les données du post
-
-      print('Post ajouté avec succès');
     } catch (e) {
-      print('Erreur lors de l\'ajout du post : $e');
+      debugPrint('Erreur lors de l\'ajout du post : $e');
     }
   }
 }
