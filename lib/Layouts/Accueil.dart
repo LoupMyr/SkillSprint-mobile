@@ -47,7 +47,9 @@ class ListeProgramme extends State<Accueil> {
   List<Widget> createCards() {
     _title = _programmesPublic
         ? "Liste des programmes public"
-        : _programmesUser ? "Liste de vos programmes" : "Liste des programmes liké";
+        : _programmesUser
+            ? "Liste de vos programmes"
+            : "Liste des programmes liké";
     List<Widget> result = [
       Column(
         children: <Widget>[
@@ -142,7 +144,7 @@ class ListeProgramme extends State<Accueil> {
       result.add(const Padding(padding: EdgeInsets.symmetric(vertical: 10)));
       result.add(const SizedBox(
         child: Text("Aucun programme trouvé",
-            style: CustomStyle.textStyleCardSubTitle),
+            style: TextStyle(color: Colors.black)),
       ));
     }
     return result;
