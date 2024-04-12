@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:skillsprint/Domain/Services/ProgrammeServiceInterface.dart';
+import 'package:skillsprint/Models/Like.dart';
 import 'package:skillsprint/Models/Programme.dart';
 
 class ProgrammeService implements ProgrammeServiceInterface {
@@ -12,12 +13,13 @@ class ProgrammeService implements ProgrammeServiceInterface {
   Future<List<Programme>> getAllProgrammes() async {
     List<Programme> programmes = [];
     await db.collection("programmes").get().then((collection) => {
-          for (var doc in collection.docs)
+          for (QueryDocumentSnapshot doc in collection.docs)
             {programmes.add(Programme.fromDocument(doc))}
         });
     return programmes;
   }
 
+  @override
   Future<void> postProgrammes(Map<String, dynamic> programme) async {
     try {
       await db.collection("programmes").add(programme);
@@ -49,4 +51,19 @@ class ProgrammeService implements ProgrammeServiceInterface {
     }
     return result;
   }
+
+  @override
+  Future<List<Programme>> getProgrammesByLikes(List<Like> likes) async{
+    List<Programme> programmes = await getAllProgrammes();
+    List<Programme> result = [];
+    for(Like like in likes){
+      for(Programme p in programmes){
+        if(like.idProgramme == p.uid){
+          result.add(p);
+        }
+      }
+    }
+    return result;
+  }
+
 }

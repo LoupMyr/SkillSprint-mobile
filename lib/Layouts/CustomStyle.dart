@@ -9,13 +9,13 @@ class CustomStyle {
   );
 
   static const TextStyle textStyleCardTitle = TextStyle(
-    color: Colors.black,
+    color: Colors.white,
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 
   static const TextStyle textStyleCardSubTitle = TextStyle(
-    color: Colors.black,
+    color: Colors.white,
     fontSize: 17,
     fontWeight: FontWeight.w600,
   );

@@ -73,7 +73,7 @@ class CreateProgrammes extends State<ProgrammeForm> {
         "", programNameController.text, isChecked, listeExercice, user!.uid);
     programmeService.postProgrammes(prgrm.serialize());
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Le programme a était créer avec success"),
+      content: Text("Le programme a été créé avec succès"),
     ));
     setState(() {
       isChecked = false;
@@ -114,7 +114,7 @@ class CreateProgrammes extends State<ProgrammeForm> {
                     margin: const EdgeInsets.only(top: 2),
                     padding: const EdgeInsets.all(20),
                     child: CheckboxListTile(
-                      title: const Text("Rendre visible"),
+                      title: const Text("Rendre public"),
                       value: isChecked,
                       onChanged: (bool? value) {
                         setState(() {
@@ -124,8 +124,43 @@ class CreateProgrammes extends State<ProgrammeForm> {
                       controlAffinity: ListTileControlAffinity.leading,
                     ),
                   ),
-                  // Afficher les formulaires d'exercices existants
                   Column(children: exerciseForms),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              exerciseForms.add(buildExerciseForm(exerciseCount));
+                              exerciseCount++;
+                            });
+                          },
+                          child: const Icon(Icons.add),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              if (exerciseForms.isNotEmpty) {
+                                exerciseForms.removeLast();
+                                exerciseNameControllers.removeLast().dispose();
+                                repetitionControllers.removeLast().dispose();
+                                setControllers.removeLast().dispose();
+                                descriptionControllers.removeLast().dispose();
+                                exerciseCount--;
+                              }
+                            });
+                          },
+                          child: const Icon(Icons.remove),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
                   Container(
                     child: TextButton(
                       style: ButtonStyle(
@@ -141,44 +176,6 @@ class CreateProgrammes extends State<ProgrammeForm> {
                 ],
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Ajouter un nouveau formulaire d'exercice à la liste
-                    setState(() {
-                      exerciseForms.add(buildExerciseForm(exerciseCount));
-                      exerciseCount++;
-                    });
-                  },
-                  child: const Icon(Icons.add),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Supprimer le dernier formulaire d'exercice de la liste
-                    setState(() {
-                      if (exerciseForms.isNotEmpty) {
-                        exerciseForms.removeLast();
-                        exerciseNameControllers.removeLast().dispose();
-                        repetitionControllers.removeLast().dispose();
-                        setControllers.removeLast().dispose();
-                        descriptionControllers.removeLast().dispose();
-                        exerciseCount--;
-                      }
-                    });
-                  },
-                  child: const Icon(Icons.remove),
-                ),
-              ),
-              const SizedBox(width: 8),
-            ],
           ),
         ],
       ),

@@ -11,7 +11,7 @@ class ExerciceService implements ExerciceServiceInterface {
   Future<Exercice?> getExerciceByUid(String uid) async {
     Exercice? exercice;
     await db.collection("exercice").get().then((collection) => {
-          for (var doc in collection.docs)
+          for (QueryDocumentSnapshot doc in collection.docs)
             {
               if (doc.id == uid) {exercice = Exercice.fromDocument(doc)}
             }
