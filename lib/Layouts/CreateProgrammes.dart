@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:skillsprint/Domain/Services/AuthServiceInterface.dart';
 import 'package:skillsprint/Layouts/Accueil.dart';
 import 'package:skillsprint/Layouts/Profil.dart';
@@ -220,6 +221,10 @@ class CreateProgrammes extends State<ProgrammeForm> {
                 padding: const EdgeInsets.all(20),
                 child: TextFormField(
                   controller: repetitionControllers.last,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Nombre de répétition',
@@ -231,6 +236,10 @@ class CreateProgrammes extends State<ProgrammeForm> {
                 padding: const EdgeInsets.all(20),
                 child: TextFormField(
                   controller: setControllers.last,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Nombre de série',
